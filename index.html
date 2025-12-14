@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc nghiệm Văn hóa Việt Nam - 125 Câu</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .question { margin-bottom: 20px; border: 1px solid #ddd; padding: 15px; border-radius: 5px; }
+        .question h3 { color: #333; }
+        .options { list-style: none; padding: 0; }
+        .options li { margin-bottom: 5px; }
+        .options input[type="radio"] { margin-right: 10px; }
+        .options li.correct { background-color: #d4edda; color: #155724; padding: 5px; border-radius: 3px; }
+        .options li.incorrect { background-color: #f8d7da; color: #721c24; padding: 5px; border-radius: 3px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; }
+        button:hover { background: #0056b3; }
+        #result { margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px; display: none; }
+        .feedback { font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Trắc nghiệm Văn hóa Việt Nam</h1>
+    <p>Tổng cộng: 125 câu. Chọn đáp án cho mỗi câu để xem kết quả ngay lập tức (màu xanh: đúng, màu đỏ: sai).</p>
+    <form id="quizForm">
+        <div id="questions"></div>
+        <button type="button" onclick="submitQuiz()">Nộp bài để xem tổng điểm</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        const questions = [
+            // Nhóm A: Dễ (1-33)
+            { q: "Câu 1. “Văn hóa là hệ thống hữu cơ các giá trị vật chất và tinh thần do con người sáng tạo và tích lũy trong quá trình hoạt động thực tiễn, trong sự tương tác giữa con người với môi trường tự nhiên và xã hội” là định nghĩa của tác giả nào?", options: ["a. Hồ Chí Minh", "b. Cao Xuân Hạo", "c. Phan Ngọc", "d. Trần Ngọc Thêm"], answer: "d" },
+            { q: "Câu 2. Văn minh là khái niệm?", options: ["a. Thiên về giá trị tinh thần và chỉ trình độ phát triển", "b. Thiên về giá trị tinh thần và có bề dày lịch sử", "c. Thiên về giá trị vật chất và có bề dày lịch sử", "d. Thiên về giá trị vật chất-kỹ thuật và chỉ trình độ phát triển"], answer: "d" },
+            { q: "Câu 3. Yếu tố nào sau đây mang tính quốc tế?", options: ["a. Văn hóa", "b. Văn hiến", "c. Văn minh", "d. Văn vật"], answer: "c" },
+            { q: "Câu 4. Xét về tính giá trị, sự khác nhau giữa văn hóa và văn minh là?", options: ["a. Văn hóa gắn với phương Đông nông nghiệp, văn minh gắn với phương Tây đô thị", "b. Văn minh chỉ trình độ phát triển còn văn hóa có bề dày lịch sử", "c. Văn minh thiên về vật chất - kỹ thuật còn văn hóa gồm vật chất lẫn tinh thần", "d. Văn hóa mang tính dân tộc, văn minh mang tính quốc tế"], answer: "c" },
+            { q: "Câu 5. Các yếu tố văn hóa truyền thống lâu đời và tốt đẹp của dân tộc, thiên về giá trị tinh thần gọi là?", options: ["a. Văn hóa", "b. Văn vật", "c. Văn minh", "d. Văn hiến"], answer: "d" },
+            { q: "Câu 6. Làng Đông Sơn – chiếc nôi của nền văn minh Đông Sơn thuộc khu vực văn hóa nào?", options: ["a. Tây Bắc", "b. Việt Bắc", "c. Bắc Bộ", "d. Đông Bắc"], answer: "c" },
+            { q: "Câu 7. Nền văn hóa nào đóng vai trò quyết định trong việc xác lập nên bản sắc văn hóa Việt?", options: ["a. Văn hóa Sơn Vi", "b. Văn hóa Hòa Bình", "c. Văn hóa Đông Sơn", "d. Văn hóa Sa Huỳnh"], answer: "c" },
+            { q: "Câu 8. Theo Trần Ngọc Thêm, tiến trình văn hóa Việt Nam có thể chia thành?", options: ["a. 3 lớp - 6 giai đoạn văn hóa", "b. 3 lớp - 3 giai đoạn văn hóa", "c. 4 lớp - 6 giai đoạn văn hóa", "d. 6 lớp - 3 giai đoạn văn hóa"], answer: "a" },
+            { q: "Câu 9. Trống đồng Đông Sơn là thành tựu của giai đoạn văn hóa nào?", options: ["a. Giai đoạn văn hoá tiền sử", "b. Giai đoạn văn hóa Văn Lang - Âu Lạc", "c. Giai đoạn văn hóa thời kỳ chống Bắc thuộc", "d. Giai đoạn văn hóa Đại Việt"], answer: "b" },
+            { q: "Câu 10. Giai đoạn văn hóa Văn Lang-Âu Lạc có ba trung tâm văn hóa lớn là?", options: ["a. Văn hóa Đông Sơn – Văn hóa Sa Huỳnh – Văn hóa Óc Eo", "b. Văn hóa Hòa Bình – Văn hóa Sơn Vi – Văn hóa Phùng Nguyên", "c. Văn hóa Đông Sơn – Văn hóa Sa Huỳnh – Văn hóa Đồng Nai", "d. Văn hóa châu thổ Bắc Bộ – Văn hóa Chămpa – Văn hóa Óc Eo"], answer: "c" },
+            { q: "Câu 11. Vùng nông nghiệp Đông Nam Á được nhiều học giả phương Tây gọi là?", options: ["a. Xứ sở mẫu hệ", "b. Xứ sở phụ hệ", "c. Cả hai ý đều đúng", "d. Cả hai ý đều sai"], answer: "a" },
+            { q: "Câu 12. Trong sự giao lưu rộng rãi với các nền văn hóa Đông Tây, văn hóa Việt Nam chịu ảnh hưởng sâu đậm của nền văn hóa nào?", options: ["a. Trung Hoa", "b. Ấn Độ", "c. Pháp", "d. Mỹ"], answer: "a" },
+            { q: "Câu 13. Thờ cúng tổ tiên được gọi là gì?", options: ["a. Tôn giáo", "b. Tín ngưỡng", "c. Mê tín dị đoan", "d. Truyền giáo"], answer: "b" },
+            { q: "Câu 14. Tục thờ Tứ bất tử trong văn hóa dân gian người Việt, là thờ vị thần nào?", options: ["a. Tản Viên, Thánh Gióng, Chử Đồng Tử, Liễu Hạnh", "b. Thành Hoàng, Thổ Công, Thổ Địa, Vua Hùng", "c. Pháp Vân, Pháp Vũ, Pháp Lôi, Pháp Điện", "d. Tản Viên, Thánh Gióng, Chử Đồng Tử, Cửu Thiên Huyền Nữ"], answer: "a" },
+            { q: "Câu 15. Trong tín ngưỡng thờ Tứ bất tử, Tản Viên là biểu tượng cho ước mơ gì của người Việt?", options: ["a. Sức mạnh đoàn kết chống giặc ngoại xâm", "b. Sức mạnh đoàn kết ứng phó với môi trường tự nhiên", "c. Ước mơ phồn vinh về vật chất", "d. Xây dựng cuộc sống hạnh phúc về tinh thần"], answer: "b" },
+            { q: "Câu 16. Trong tín ngưỡng sùng bái tự nhiên của người Việt, loại thực vật nào được tôn sùng và thờ cúng nhiều nhất?", options: ["a. Cây đa", "b. Cây cau", "c. Cây lúa", "d. Cây mía"], answer: "c" },
+            { q: "Câu 17. Mẫu Thoải là tên gọi khác của?", options: ["a. Bà Trời", "b. Bà Đất", "c. Bà Nước", "d. Bà Mây"], answer: "c" },
+            { q: "Câu 18. Tết Nguyên Đán còn được gọi là tết gì?", options: ["a. Tết Đoan Ngọ", "b. Tết Hạ Nguyên", "c. Tết Trung Nguyên", "d. Tết Ta, tết Cả"], answer: "d" },
+            { q: "Câu 19. Vị thần quan trọng nhất trong làng quê Việt Nam, có vai trò cai quản, che chở, định đoạt phúc họa trong làng đó là?", options: ["a. Thổ Công", "b. Thổ Địa", "c. Thần Tài", "d. Thành Hoàng"], answer: "d" },
+            { q: "Câu 20. Hình ảnh nào là biểu tượng truyền thống của tính tự trị trong làng xã cổ truyền Việt Nam?", options: ["a. Sân đình", "b. Bến nước", "c. Cây đa", "d. Lũy tre"], answer: "d" },
+            { q: "Câu 21. Đặc trưng cơ bản của nông thôn cổ truyền Việt Nam, đó là?", options: ["a. Tính cộng đồng và tính tự trị", "b. Tính địa phương và tính tập thể", "c. Tính tập thể và tính bè phái", "d. Tính cá nhân"], answer: "a" },
+            { q: "Câu 22. Triều đại nào dưới đây xem Nho giáo là quốc giáo, giữ vị trí độc tôn?", options: ["a. Lý", "b. Trần", "c. Lê Sơ", "d. Lý và Trần"], answer: "c" },
+            { q: "Câu 23. Đặc điểm nào sau đây không thuộc loại hình văn hóa gốc nông nghiệp?", options: ["a. Con người luôn có tham vọng chinh phục tự nhiên", "b. Con người ưa sống theo nguyên tắc trọng tình", "c. Lối sống linh hoạt, luôn biến báo cho thích hợp với hoàn cảnh", "d. Định canh, định cư"], answer: "a" },
+            { q: "Câu 24. Trong các vùng văn hóa, vùng sớm có sự tiếp cận và đi đầu trong quá trình giao lưu hội nhập với văn hóa phương Tây là?", options: ["a. Vùng văn hóa Trung Bộ", "b. Vùng văn hóa Bắc Bộ", "c. Vùng văn hóa Nam bộ", "d. Vùng văn hóa Việt Bắc"], answer: "c" },
+            { q: "Câu 25. Vùng văn hóa nào có truyền thống lâu đời và là cái nôi hình thành văn hóa, văn minh của dân tộc Việt?", options: ["a. Vùng văn hóa Trung Bộ", "b. Vùng văn hóa Bắc Bộ", "c. Vùng văn hóa Nam bộ", "d. Vùng văn hóa Việt Bắc"], answer: "b" },
+            { q: "Câu 26. Lớp văn hóa bản địa gồm những giai đoạn văn hóa nào?", options: ["a. Giai đoạn văn hoá tiền sử và giai đoạn văn hóa Văn Lang- Âu Lạc", "b. Giai đoạn văn hóa Văn Lang- Âu Lạc và giai đoạn văn hóa chống Bắc thuộc", "c. Giai đoạn văn hóa chống Bắc thuộc và giai đoạn văn hóa Đại Việt", "d. Giai đoạn văn hóa Đại Việt và giai đoạn văn hóa Đại Nam"], answer: "a" },
+            { q: "Câu 27. Thời kỳ 179 TCN - 938 ứng với giai đoạn nào trong tiến trình văn hóa Việt Nam?", options: ["a. Giai đoạn văn hoá tiền sử", "b. Giai đoạn văn hóa Văn Lang- Âu Lạc", "c. Giai đoạn văn hóa thời kỳ Bắc thuộc", "d. Giai đoạn văn hóa Đại Việt"], answer: "c" },
+            { q: "Câu 28. Thành tựu nổi bật của giai đoạn văn hóa Văn Lang – Âu Lạc là?", options: ["a. Nghề thủ công mỹ nghệ", "b. Kỹ thuật đúc đồng thau", "c. Nghề trồng dâu nuôi tằm", "d. Kỹ thuật chế tạo đồ sắt"], answer: "b" },
+            { q: "Câu 29. Người sáng lập ra Ki tô giáo là ai?", options: ["a. Jesus Christ", "b. Sidharta Gautama", "c. Muhammad", "d. Khổng Tử"], answer: "a" },
+            { q: "Câu 30. Điệu múa Xòe là đặc sản nghệ thuật của vùng văn hóa nào?", options: ["a. Vùng văn hóa Tây Bắc", "b. Vùng văn hóa Bắc Bộ", "c. Vùng văn hóa Việt Bắc", "d. Vùng văn hóa Trung Bộ"], answer: "a" },
+            { q: "Câu 31. Hệ thống “mương – phai – lái – lịn” là hệ thống tưới tiêu nổi tiếng của văn hóa nông nghiệp thuộc vùng nào?", options: ["a. Vùng văn hóa Tây Bắc", "b. Vùng văn hóa Bắc Bộ", "c. Vùng văn hóa Việt Bắc", "d. Vùng văn hóa Trung Bộ"], answer: "a" },
+            { q: "Câu 32. Kiểu nhà ở phổ biến của cư dân văn hóa Đông Sơn là?", options: ["a. Nhà thuyền", "b. Nhà đất bằng", "c. Nhà bè", "d. Nhà sàn"], answer: "d" },
+            { q: "Câu 33. Trong tập tục hôn nhân cổ truyền của người Việt, khi hai họ tính chuyện dựng vợ gả chồng cho con cái, yếu tố nào sau đây được quan tâm hàng đầu?", options: ["a. Quyền lợi của làng xã", "b. Quyền lợi của gia tộc", "c. Sự phù hợp của đôi trai gái", "d. Sự phù hợp giữa mẹ chồng - nàng dâu"], answer: "b" },
+
+            // Nhóm B: Trung bình (34-93)
+            { q: "Câu 34. Tín ngưỡng, phong tục là những yếu tố thuộc thành tố văn hóa nào?", options: ["a. Văn hóa nhận thức", "b. Văn hóa tổ chức cộng đồng", "c. Văn hóa ứng xử với môi trường tự nhiên", "d. Văn hóa ứng xử với môi trường xã hội"], answer: "b" },
+            { q: "Câu 35. Các luồng tư tưởng dân chủ tư sản, tư tưởng Mác-Lênin được truyền vào Việt Nam vào giai đoạn văn hóa nào?", options: ["a. Văn hóa thời kỳ Bắc thuộc", "b. Văn hóa Đại Việt", "c. Văn hóa thời kỳ Pháp thuộc", "d. Giai đoạn văn hóa hiện đại"], answer: "c" },
+            { q: "Câu 36. Đặc điểm nổi bật nhất của giai đoạn văn hóa Việt Nam thời kỳ chống Bắc thuộc là gì?", options: ["a. Ý thức đối kháng bất khuất trước sự xâm lăng của phong kiến phương Bắc", "b. Tiếp biến văn hóa Hán để làm giàu cho văn hóa dân tộc", "c. Giao lưu tự nhiên với văn hóa Ấn Độ", "d. Giữ gìn, bảo tồn bản sắc văn hóa dân tộc"], answer: "a" },
+            { q: "Câu 37. Sự đa dạng của môi trường tự nhiên và sự đa dạng của các tộc người trong thành phần dân tộc đã tạo nên đặc điểm gì của văn hóa Việt Nam?", options: ["a. Mỗi vùng văn hóa có một bản sắc riêng, có tính thống nhất trong sự đa dạng.", "b. Bản sắc chung của văn hóa", "c. Sự tương đồng giữa các vùng văn hóa", "d. Sự khác biệt giữa các vùng văn hóa"], answer: "a" },
+            { q: "Câu 38. Trong lối nhận thức, tư duy, loại hình văn hoá gốc nông nghiệp có đặc điểm gì?", options: ["a. Tư duy thiên về phân tích và trọng yếu tố; cách nhìn thiên về chủ quan, cảm tính và kinh nghiệm", "b. Tư duy thiên về tổng hợp và biện chứng; cách nhìn thiên về chủ quan, cảm tính và kinh nghiệm", "c. Tư duy thiên về tổng hợp và trọng yếu tố; cách nhìn thiên về chủ quan, lý tính và kinh nghiệm", "d. Tư duy thiên về tổng hợp và biện chứng; cách nhìn thiên về khách quan, cảm tính và thực nghiệm"], answer: "b" },
+            { q: "Câu 39. Lối ứng xử năng động và linh hoạt giúp người Việt thích nghi cao với mọi tình huống, nhưng đồng thời cũng mang lại thói xấu gì?", options: ["a. Thói đố kỵ cào bằng", "b. Thói dựa dẫm, ỷ lại", "c. Thói tùy tiện", "d. Thói bè phái"], answer: "c" },
+            { q: "Câu 40. Nhóm cư dân Bách Việt còn có tên gọi khác là gì?", options: ["a. Austroasiatic", "b. Australoid", "c. Austronésien", "d. Mongoloid"], answer: "a" },
+            { q: "Câu 41. Trò chơi Văn hóa dân gian nào mang ước vọng “cầu mưa”?", options: ["a. Thả diều", "b. Ném còn", "c. Thổi cơm", "d. Đánh pháo đất"], answer: "d" },
+            { q: "Câu 42. Dân gian có câu “trống làng nào làng đấy đánh, Thánh làng nào làng đó thờ”. Vị thánh trong câu ca dao trên là vị nào?", options: ["a. Thành Hoàng", "b. Thổ Công", "c. Thổ Địa", "d. Thần Tài"], answer: "a" },
+            { q: "Câu 43. Hình thức tổ chức nông thôn theo truyền thống nam giới (chỉ có đàn ông tham gia) tạo nên đơn vị gọi là gì?", options: ["a. Phường", "b. Hội", "c. Giáp", "d. Gia tộc"], answer: "c" },
+            { q: "Câu 44. Đình là biểu tượng tập trung nhất của làng xã về những phương diện nào?", options: ["a. Trung tâm văn hóa xã hội", "b. Trung tâm hành chính", "c. Trung tâm về mặt tín ngưỡng", "d. Cả 3 câu đều đúng"], answer: "d" },
+            { q: "Câu 45. Tổ chức nông thôn cổ truyền Việt Nam, dân chính cư trong xã chia ra làm những hạng nào?", options: ["a. Chức sắc, chức dịch, lão, đinh, tí ấu", "b. Chức sắc, chức dịch, đinh, tí ấu", "c. Chức sắc, chức dịch, lão, ti ấu", "d. Chức sắc, chức dịch, lão, đinh"], answer: "a" },
+            { q: "Câu 46. Diệt đế trong Tứ diệu đế của Phật giáo được hiểu là?", options: ["a. Chân lý về nguyên nhân của nỗi khổ", "b. Chân lý về bản chất của nỗi khổ", "c. Chân lý về cảnh giới diệt khổ", "d. Chân lý về con đường diệt khổ"], answer: "c" },
+            { q: "Câu 47. An Nam tứ đại khí là thành tựu Văn hóa Phật giáo thời nào?", options: ["a. Lê", "b. Lý", "c. Trần", "d. Thời Lý và Trần"], answer: "d" },
+            { q: "Câu 48. Mộ Chum thuộc nền văn hóa nào ở nước ta?", options: ["a. Đông Sơn", "b. Đồng Nai", "c. Sa Huỳnh", "d. Gò Mun"], answer: "c" },
+            { q: "Câu 49. Nguyên liệu xây dựng tháp Chăm chủ yếu là gì?", options: ["a. Đá", "b. Gỗ", "c. Gạch", "d. Thạch cao"], answer: "c" },
+            { q: "Câu 50. Danh nhân?", options: ["a. Người có danh tiếng được xã hội công nhận", "b. Một vài cách gọi khác như “vĩ nhân”, “hào kiệt”, “thiên tài”", "c. Là người nổi tiếng trên thương trường", "d. Người có danh tiếng được xã hội công nhận và có vài cách gọi khác như “vĩ nhân”, “hào kiệt”, “thiên tài”"], answer: "d" },
+            { q: "Câu 51. Người Việt (Kinh) tách ra từ khối Việt-Mường vào khoảng thời gian nào?", options: ["a. 2000 năm TCN", "b. 1000 năm TCN", "c. Đầu thời kỳ Bắc thuộc (thế kỷ I-II)", "d. Cuối thời kỳ Bắc thuộc (thế kỷ VII-VIII)"], answer: "d" },
+            { q: "Câu 52. Đặc trưng của vùng văn hóa Tây Bắc là?", options: ["a. Nghệ thuật trang trí tinh tế trên trang phục", "b. Lễ hội lồng tồng", "c. Văn hóa cồng chiêng", "d. Những trường ca (khan, k’ămon) nổi tiếng"], answer: "a" },
+            { q: "Câu 53. Đặc trưng của vùng văn hóa Việt Bắc là gì?", options: ["a. Nghệ thuật trang trí tinh tế trên trang phục, chăn màn...", "b. Lễ hội lồng tồng", "c. Văn hóa cồng chiêng", "d. Những trường ca (khan, k’ămon) nổi tiếng"], answer: "b" },
+            { q: "Câu 54. Ở giai đoạn văn hóa tiền sử, thành tựu lớn nhất của cư dân Nam Á là?", options: ["a. Hình thành nghề nông nghiệp lúa nước", "b. Kỹ thuật luyện kim đồng", "c. Kỹ thuật luyện sắt", "d. Kỹ thuật chế tạo đồ gốm"], answer: "a" },
+            { q: "Câu 55. Từ 938 đến 1858 ứng với giai đoạn nào trong tiến trình văn hóa Việt Nam?", options: ["a. Giai đoạn văn hoá tiền sử", "b. Giai đoạn văn hóa Văn Lang- Âu Lạc", "c. Giai đoạn văn hóa chống Bắc thuộc", "d. Giai đoạn văn hóa Đại Việt"], answer: "d" },
+            { q: "Câu 56. Chiếc áo dài của người phụ nữ Việt Nam là sản phẩm của?", options: ["a. Sự kết hợp giữa văn hóa truyền thống và văn hóa phương Tây", "b. Sự tiếp thu văn hóa phương Tây", "c. Sự tiếp thu văn hóa truyền thống", "d. Sự tiếp thu văn hóa Trung Hoa"], answer: "a" },
+            { q: "Câu 57. Nói về làng Nam Bộ, nhận xét nào sau đây là không đúng?", options: ["a. Thôn Ấp ở Nam Bộ trải dài dọc theo các kênh rạch, các trục giao thông thuận lợi", "b. Làng Nam Bộ không có đình làng và tín ngưỡng thờ Thành Hoàng", "c. Dân cư dễ biến động", "d. Làng Nam Bộ có tính mở"], answer: "b" },
+            { q: "Câu 58. Biểu tượng âm dương truyền thống lâu đời của người Việt là?", options: ["a. Công cha nghĩa mẹ", "b. Ông Tơ bà Nguyệt", "c. Biểu tượng vuông tròn", "d. Con Rồng cháu Tiên"], answer: "c" },
+            { q: "Câu 59. Truyền thống hiếu học và tinh thần “Tôn sư trọng đạo” trong văn hóa Việt Nam có nguồn gốc từ quan niệm nào trong xã hội phong kiến?", options: ["a. Quan niệm “Nhất sĩ nhì nông”", "b. Quan niệm “Không thầy đố mầy làm nên”", "c. Thái độ khinh rẻ nghề buôn", "d. Việc coi trọng chế độ khoa cử"], answer: "d" },
+            { q: "Câu 60. Trong tín ngưỡng sùng bái tự nhiên của người Việt, tại sao nữ thần chiếm ưu thế hơn nam thần?", options: ["a. Vì mục đích phồn thực", "b. Văn hóa Việt trước đây trọng âm", "c. Chế độ xã hội mẫu hệ đầu tiên của người Việt", "d. Tất cả câu đều đúng"], answer: "d" },
+            { q: "Câu 61. Tục “giã cối đón dâu” của người Việt trong nghi lễ hôn nhân cổ truyền có ý nghĩa gì?", options: ["a. Cầu chúc đôi vợ chồng hạnh phúc", "b. Cầu chúc đôi vợ chồng đông con đông cháu", "c. Chúc cho cô dâu đảm đương công việc nhà chồng tốt", "d. Cầu chúc cho gia đình có thêm thành viên mới trên dưới hòa thuận hạnh phúc"], answer: "b" },
+            { q: "Câu 62. Trong hôn nhân cổ truyền, tục lệ nào sau đây được tiến hành trong lễ hợp cẩn để cầu chúc cho hai vợ chồng mới cưới luôn gắn bó yêu thương nhau?", options: ["a. Tục trao cho nhau nắm đất và gói muối", "b. Mẹ chồng ôm bình vôi lánh sang nhà hàng xóm", "c. Tục uống rượu, ăn cơm nếp", "d. Tục giã cối đón dâu"], answer: "c" },
+            { q: "Câu 63. Trong các nghi thức đám tang, lễ phạn hàm là lễ?", options: ["a. Tắm rửa cho người mất", "b. Bỏ tiền và nhúm gạo nếp vào miệng người chết", "c. Đặt tên thụy cho người chết", "d. Khâm liệm cho người chết"], answer: "b" },
+            { q: "Câu 64. Lễ vía Thần Tài trong năm vào ngày nào?", options: ["a. Mùng 09 tháng giêng âm lịch", "b. Mùng 10 âm lịch hàng tháng", "c. Mùng 10 tháng giêng âm lịch", "d. Mùng 15 tháng giêng âm lịch"], answer: "c" },
+            { q: "Câu 65. Trò chơi văn hóa dân gian “cướp cầu thả lỗ” thể hiện ước mong gì?", options: ["a. Ước mong cầu mưa", "b. Ước mong cầu cạn", "c. Ước mong phồn thực", "d. Ước mong an lành"], answer: "c" },
+            { q: "Câu 66. Phật giáo khi mới truyền vào Việt Nam (đầu công nguyên) mang màu sắc tông phái nào?", options: ["a. Đại Thừa Nam Tông", "b. Đại Thừa Bắc Tông", "c. Tiểu Thừa Nam Tông", "d. Tiểu Thừa Bắc Tông"], answer: "c" },
+            { q: "Câu 67. Hai bộ sách kinh điển của Nho giáo có tên gọi là gì?", options: ["a. Tứ thư và Nam Hoa kinh", "b. Nam Hoa kinh và Ngũ kinh", "c. Tứ thư và Ngũ kinh", "d. Nam Hoa kinh và Đạo Đức kinh"], answer: "c" },
+            { q: "Câu 68. An Nam tứ đại khí là các vật báu nào?", options: ["a. Chuông Qui điền, chùa Diên Hựu, vạc Phổ Minh, tháp Báo Thiên", "b. Chuông Qui điền, tượng Phật chùa Quỳnh Lâm, vạc Phổ Minh, tháp Báo Thiên", "c. Chuông Qui điền, tháp Báo Ân, tượng Phật chùa Quỳnh Lâm, vạc Phổ Minh", "d. Chuông Qui điền, chùa Một cột, tháp Báo Thiên, vạc Phổ Minh"], answer: "b" },
+            { q: "Câu 69. Hình tượng sinh thực khí nam trong tín ngưỡng phồn thực của người Chăm có tên gọi là gì?", options: ["a. Nõ", "b. Nường", "c. Linga", "d. Yoni"], answer: "c" },
+            { q: "Câu 70. Người Chăm theo Hồi giáo ở An Giang kiêng kỵ ăn thịt động vật nào?", options: ["a. Heo", "b. Bò", "c. Dê", "d. Heo và bò"], answer: "a" },
+            { q: "Câu 71. Một nền Văn hóa tổ tiên của người Chăm ở miền Trung là?", options: ["a. Văn hóa Đồng Nai", "b. Văn hóa Sa Huỳnh", "c. Văn hóa Chămpa", "d. Văn hóa Óc Eo"], answer: "b" },
+            { q: "Câu 72. Chùa Một cột, do vị vua nào xây dựng?", options: ["a. Lý Anh Tông", "b. Lý Thái Tông", "c. Lý Nhân Tông", "d. Lý Thần Tông"], answer: "b" },
+            { q: "Câu 73. Đạo giáo du nhập vào Việt Nam trong khoảng thời gian nào?", options: ["a. Cuối thế kỷ II", "b. Thế kỷ III", "c. Thế kỷ IV", "d. Thế kỷ V"], answer: "a" },
+            { q: "Câu 74. Ai là người được vinh danh là Danh nhân văn hóa thế giới?", options: ["a. Lê Thánh Tông", "b. Ngô Sĩ Liên", "c. Nguyễn Trãi", "d. Nguyễn Bỉnh Khiêm"], answer: "c" },
+            { q: "Câu 75. Trong “Thất trảm sớ” của Danh nhân văn hóa Chu Văn An, ông đã đề nghị vua chém đối tượng nào?", options: ["a. 7 quan tham, nịnh thần", "b. 7 loại tội phạm thời đó", "c. 7 tên tướng giặc Trung Quốc", "d. 7 tướng quân"], answer: "a" },
+            { q: "Câu 76. Tác phẩm “Thượng kinh ký sự” của Danh nhân văn hóa nào ở Việt Nam?", options: ["a. Tuệ Tĩnh", "b. Lê Hữu Trác", "c. Nguyễn Bỉnh Khiêm", "d. Lý Thời Trân"], answer: "b" },
+            { q: "Câu 77. Theo Ngũ hành, vật biểu cho phương Nam là con vật nào?", options: ["a. Rùa", "b. Chim", "c. Rồng", "d. Hổ"], answer: "b" },
+            { q: "Câu 78. Sự tích Trầu cau trong kho tàng văn học dân gian Việt Nam thể hiện triết lý gì của văn hóa nhận thức?", options: ["a. Âm dương", "b. Tam tài", "c. Ngũ hành", "d. Bát quái"], answer: "b" },
+            { q: "Câu 79. Trong Hà đồ, con số mấy được gọi là số “Tham Thiên Lưỡng Địa”?", options: ["a. 2", "b. 5", "c. 7", "d. 9"], answer: "b" },
+            { q: "Câu 80. Theo lịch âm dương, ngày nóng nhất trong năm là ngày nào?", options: ["a. Lập hạ", "b. Hạ chí", "c. Đoan ngọ", "d. Đoan dương"], answer: "b" },
+            { q: "Câu 81. Theo Ngũ hành, vật biểu cho phương Đông là con vật nào?", options: ["a. Rùa", "b. Chim", "c. Rồng", "d. Hổ"], answer: "c" },
+            { q: "Câu 82. Thành ngữ “Sống lâu lên lão làng” phản ánh đặc điểm gì trong văn hóa tổ chức nông thôn của người Việt?", options: ["a. Tính tôn ti trật tự", "b. Tính gia trưởng", "c. Thói bè phái", "d. Thói dựa dẫm, ỷ lại"], answer: "a" },
+            { q: "Câu 83. Chế độ thị tộc phụ quyền xuất hiện trong xã hội Việt Nam vào thời kỳ văn hóa nào?", options: ["a. Văn hóa thời kỳ tiền sử", "b. Văn hóa Văn Lang – Âu Lạc", "c. Văn hóa thời kỳ Bắc thuộc", "d. Văn hóa Đại Việt"], answer: "c" },
+            { q: "Câu 84. Ý nghĩa tín ngưỡng phồn thực?", options: ["a. Làm ma thuật để truyền sinh cho mùa màng", "b. Cầu cho đông con, nhiều cháu", "c. Cầu mong mùa màng, con người, động vật, thực vật ngày càng sinh sôi nảy nở", "d. Cầu mong sự may mắn, no đủ cho cả năm"], answer: "c" },
+            { q: "Câu 85. Việc phân biệt dân chính cư và dân ngụ cư trong tổ chức nông thôn Việt Nam cổ truyền nhằm mục đích gì?", options: ["a. Buộc người dân trong làng cả đời gắn bó quê hương", "b. Hạn chế không cho người dân bỏ làng ra ngoài", "c. Hạn chế không cho người dân ngoài làng vào sống ở làng", "d. Duy trì sự ổn định của làng xã"], answer: "d" },
+            { q: "Câu 86. Đặc điểm văn hóa Phật giáo Việt Nam?", options: ["a. Tính tổng hợp, tính linh hoạt, khuynh hướng thiên về nam tính", "b. Tính tổng hợp, khuynh hướng thiên về nữ tính, tính linh hoạt", "c. Tính linh hoạt, tính tổng hợp, tính trọng tình", "d. Tất cả câu đều đúng"], answer: "b" },
+            { q: "Câu 87. Nhà nước phong kiến Việt Nam chủ động tiếp nhận Nho giáo với mục đích chính là gì?", options: ["a. Tổ chức triều đình và xây dựng pháp luật", "b. Xây dựng hệ thống thi cử", "c. Vay mượn chữ viết (chữ Hán)", "d. Tất cả câu đều đúng"], answer: "d" },
+            { q: "Câu 88. Đâu là biểu hiện cơ bản nhất trong các phương thức suy tôn Danh nhân Văn hóa tại Việt Nam?", options: ["a. Đặt tên cho những công trình văn hóa lớn (quảng trường, con đường, trường học...)", "b. Ghi chép vào sử sách, sáng tác những tác phẩm nghệ thuật như truyền thuyết, ca dao...để ca ngợi", "c. Nghiên cứu và vận dụng sáng tạo những giá trị tinh thần các danh nhân để lại cho hậu thế", "d. Thần thánh hóa các danh nhân"], answer: "c" },
+            { q: "Câu 89: Vị thần được thờ phổ biến nhất trong các tháp Chăm là vị thần nào?", options: ["a. Thần Brahma", "b. Thần Visnu", "c. Thần Silva", "d. Thần Ganesha"], answer: "c" },
+            { q: "Câu 90: Lối kiến trúc “tiền Phật hậu Thần” của chùa Việt Nam thể hiện đặc tính gì?", options: ["a. Tính tổng hợp", "b. Tính biện chứng", "c. Tính linh hoạt", "d. Thiên về nữ tính"], answer: "a" },
+            { q: "Câu 91: Trong xã hội xưa, nghề nào được coi trọng nhất?", options: ["a. Sĩ", "b. Nông", "c. Công", "d. Thương"], answer: "a" },
+            { q: "Câu 92: Phường và Hội là cách tổ chức nông thôn theo gì?", options: ["a. Truyền thống nam giới", "b. Đơn vị hành chính", "c. Nghề nghiệp, sở thích", "d. Địa bàn cư trú"], answer: "c" },
+            { q: "Câu 93: “Kẻ chợ” là tên gọi khác của địa danh nào?", options: ["a. Sài Gòn", "b. Thăng Long", "c. Huế", "d. Đà Nẵng"], answer: "b" },
+
+            // Nhóm C: Khó (94-125)
+            { q: "Câu 94. Cây cắm trên ghe, thuyền có treo các loại hàng hóa ở Chợ nổi trên sông của cư dân vùng đồng bằng sông Cửu Long gọi là gì?", options: ["a. Cây Sào", "b. Cây Tre", "c. Cây Bẹo", "d. Tất cả đều đúng"], answer: "c" },
+            { q: "Câu 95. Lễ hội “ Đua bò Bảy Núi” được tổ chức tháng 8 hàng năm diễn ra ở đâu?", options: ["a. Hà Giang", "b. Tiền Giang", "c. An Giang", "d. Bắc Giang"], answer: "c" },
+            { q: "Câu 96. Chủng người nào là cư dân Đông Nam Á cổ?", options: ["a. Indonésien", "b. Austroasiatic", "c. Austronésien", "d. Australoid"], answer: "a" },
+            { q: "Câu 97. Ai được người dân suy tôn là Thanh Sơn Đạo Sĩ (Thanh Sơn chơn nhơn), là một trong ba vị thánh linh thiêng của đạo Cao Đài?", options: ["a. Chu Văn An", "b. Nguyễn Thượng Hiền", "c. Nguyễn Bỉnh Khiêm", "d. Nguyễn Công Trứ"], answer: "c" },
+            { q: "Câu 98. Chức năng điều chỉnh xã hội tương ứng với đặc trưng nào của văn hóa?", options: ["a. Tính lịch sử", "b. Tính giá trị", "c. Tính nhân sinh", "d. Tính hệ thống"], answer: "b" },
+            { q: "Câu 99. Đặc trưng nào cho phép phân biệt văn hóa như một hiện tượng xã hội do con người tạo ra với các giá trị tự nhiên do thiên nhiên tạo ra?", options: ["a. Tính lịch sử", "b. Tính giá trị", "c. Tính nhân sinh", "d. Tính hệ thống"], answer: "c" },
+            { q: "Câu 100. Nói văn hóa “là một thứ gien xã hội di truyền phẩm chất con người lại cho các thế hệ mai sau” là muốn nhấn mạnh đến chức năng nào của văn hóa?", options: ["a. Chức năng tổ chức", "b. Chức năng điều chỉnh xã hội", "c. Chức năng giao tiếp", "d. Chức năng giáo dục"], answer: "d" },
+            { q: "Câu 101. Chức năng nào của văn hóa giúp xã hội định hướng các chuẩn mực và làm động lực cho sự phát triển?", options: ["a. Chức năng tổ chức", "b. Chức năng điều chỉnh xã hội", "c. Chức năng giao tiếp", "d. Chức năng giáo dục"], answer: "b" },
+            { q: "Câu 102. Chế phẩm đặc thù của văn hóa Đồng Nai là?", options: ["a. Đàn đá", "b. Mô chum gốm", "c. Trang sức bằng vàng", "d. Khuyên tai hai đầu thú"], answer: "a" },
+            { q: "Câu 103. Tiếp thu tư tưởng văn hóa phương Tây, các nhà Nho trong phong trào Đông Kinh nghĩa thục đã chủ trương từ bỏ sự lạc hậu, đến với sự cách tân bằng con đường?", options: ["a. Dân tộc hóa, đại chúng hóa và khoa học hóa", "b. Nhân văn, dân chủ và tiến bộ", "c. Xây dựng nền văn hóa tiên tiến, đậm đà bản sắc dân tộc", "d. Chấn hưng dân khí, khai thông dân trí, mở rộng dân quyền, cải thiện dân sinh"], answer: "d" },
+            { q: "Câu 104. Loại hình nghệ thuật truyền thống đầu tiên ở Việt Nam được UNESCO công nhận là Kiệt tác di sản văn hóa phi vật thể và truyền khẩu của nhân loại là?", options: ["a. Nhã nhạc cung đình Huế", "b. Dân ca quan họ", "c. Ca trù", "d. Đờn ca tài tử Nam Bộ"], answer: "a" },
+            { q: "Câu 105. Lễ hội Trò Trám mang đậm tín ngưỡng phồn thực có lịch sử lâu đời của người Việt tổ chức ở tỉnh nào?", options: ["a. Bắc Giang", "b. Phú Thọ", "c. An Giang", "d. Bắc Ninh"], answer: "b" },
+            { q: "Câu 106. Lễ hội Tịch điền được diễn ra vào thời gian và địa điểm nào ở Việt Nam?", options: ["a. Ngày 15- 01 âm lịch, tại Hà Nam", "b. Ngày 07-01 âm lịch, tại Hà Nam", "c. Ngày 15-01 âm lịch, tại Bắc Hà", "d. Ngày 07-01 âm lịch, tại Bắc Hà"], answer: "b" },
+            { q: "Câu 107. Con rối trong nghệ thuật Múa rối nước chủ yếu làm từ gỗ gì?", options: ["a. Mít", "b. Me", "c. Sung", "d. Hương"], answer: "c" },
+            { q: "Câu 108. Qua câu đố sau, cho biết đây là anh hùng dân tộc nào? “Ai người phá Tống bình Chiêm, Ba ngày phá vỡ Khâm, Liêm hai thành. Ung Châu đổ nát tan tành, Mở đầu Bắc phạt, uy danh lẫy lừng?”", options: ["a. Lê Đại Hành", "b. Lý Thường Kiệt", "c. Trần Hưng Đạo", "d. Lê Lợi"], answer: "b" },
+            { q: "Câu 109. Tác phẩm “Văn tế thập loại chúng sinh” của Danh nhân văn hóa nào?", options: ["a. Lê Hữu Trác", "b. Nguyễn Trãi", "c. Nguyễn Du", "d. Chu Văn An"], answer: "c" },
+            { q: "Câu 110. Trong truyền thuyết Nam Tào – Bắc Đẩu, thần nào là thần giữ sổ sinh, ở cung hướng nào? Khi chầu Ngọc Hoàng vị thần này đứng bên trái hay bên phải?", options: ["a. Bắc Đẩu/Nam/trái", "b. Bắc Đẩu/Bắc/phải", "c. Nam Tào/Nam/trái", "d. Nam Tào/Bắc/phải"], answer: "c" },
+            { q: "Câu 111. Năm Ất Mão (1075), vua Lý Nhân Tông (1072-1127) cho mở khoa thi đầu tiên để tuyển chọn nhân tài. Người đỗ đầu trong kỳ thi đó là nhà Nho nào?", options: ["a. Lê Văn Hưu", "b. Chu Văn An", "c. Lê Văn Thịnh", "d. Nguyễn Hiền"], answer: "c" },
+            { q: "Câu 112. Dưới ảnh hưởng của văn hóa phương Tây, nền giáo dục Nho học của Việt Nam dần tàn lụi và hoàn toàn chấm dứt vào năm nào?", options: ["a. 1898", "b. 1906", "c. 1915", "d. 1919"], answer: "d" },
+            { q: "Câu 113. Chợ tình Khâu Vai thuộc vùng văn hóa nào?", options: ["a. Vùng văn hóa Tây Bắc", "b. Vùng văn hóa Bắc Bộ", "c. Vùng văn hóa Việt Bắc", "d. Vùng văn hóa Trung Bộ"], answer: "c" },
+            { q: "Câu 114. Sự tương đồng giữa văn hóa Việt Nam và văn hóa các dân tộc Đông Nam Á được hình thành từ?", options: ["a. Lớp văn hóa bản địa với nền của văn hóa Nam Á và Đông Nam Á", "b. Lớp văn hóa giao lưu với Trung Hoa và khu vực", "c. Lớp văn hóa giao lưu với phương Tây", "d. Sự mở cửa giao lưu với các nền văn hóa trên toàn thế giới"], answer: "a" },
+            { q: "Câu 115. Ông tổ của Đạo giáo Việt Nam là ai?", options: ["a. Trần Hưng Đạo", "b. Chử Đồng Tử", "c. Liễu Hạnh", "d. Thánh Gióng"], answer: "b" },
+            { q: "Câu 116. Việc tiếp xúc với văn hóa phương Tây đã bổ sung thêm lối tư duy gì cho người Việt Nam?", options: ["a. Tư duy phân tích", "b. Tư duy tổng hợp", "c. Tư duy biện chứng", "d. Tư duy trừu tượng"], answer: "a" },
+            { q: "Câu 117. Phong tục hôn nhân truyền thống của người Việt xưa, bao gồm mấy lễ?", options: ["a. Lễ nạp thái, lễ vấn danh, lễ nạp cát, lễ thỉnh kỳ, lễ chạm ngõ, lễ thân nghinh", "b. Lễ nạp thái, lễ vấn danh, lễ nạp tệ, lễ thỉnh kỳ, lễ chạm ngõ, lễ thân nghinh", "c. Lễ nạp thái, lễ vấn danh, lễ nạp cát, lễ thỉnh kỳ, lễ nạp tệ, lễ thân nghinh", "d. Lễ chạm ngõ, lễ ăn hỏi, lễ cưới"], answer: "c" },
+            { q: "Câu 118. Câu tục ngữ “Lấy chồng khó giữa làng, hơn lấy chồng sang thiên hạ” phản ánh gì?", options: ["a. Tâm lý coi trọng bà con hàng xóm láng giềng", "b. Tâm lý trọng tình trọng nghĩa", "c. Tâm lý coi trọng sự ổn định làng xã, khinh rẻ dân ngụ cư", "d. Tâm lý coi khinh tiền tài vật chất"], answer: "c" },
+            { q: "Câu 119. Khi chôn cất người chết, tục đặt trên mộ bát cơm, quả trứng, và đôi đũa. Những lễ vật này có ý nghĩa gì?", options: ["a. Cầu chúc cho người chết sớm đầu thai trở lại", "b. Thể hiện lòng tiếc thương của người sống với người chết", "c. Mong người chết được no đủ ở thế giới bên kia", "d. Cúng cho các vong hồn khác khỏi quấy phá người chết"], answer: "a" },
+            { q: "Câu 120. Vua nào cho lập Văn Miếu thờ Chu Công?", options: ["a. Lý Thái Tông", "b. Lý Thánh Tông", "c. Lê Hy Tông", "d. Lê Thái Tông"], answer: "b" },
+            { q: "Câu 121. Pho tượng một vị Vua phủ phục dưới Đức Phật thể hiện sự sám hối của mình ở chùa Hòe Nhai- Hà Nội. Vị vua đó là ai?", options: ["a. Lý Anh Tông", "b. Lê Thánh Tông", "c. Lê Hy Tông", "d. Trần Anh Tông"], answer: "c" },
+            { q: "Câu 122. Tờ báo đầu tiên nào được phát hành bằng chữ Quốc ngữ?", options: ["a. Việt Nam báo", "b. Gia Định báo", "c. Duy Tân báo", "d. Đại đoàn kết"], answer: "b" },
+            { q: "Câu 123. \"Hiền tài là nguyên khí của nhà nước, nguyên khí mạnh thì trị đạo mới thịnh, khoa mục là đường thẳng của quan trường, đường thẳng mở thì chân nho mới có\". Câu nói này phản ánh nội dung gì?", options: ["a. Nghĩa vụ và nhân tài đối với trách nhiệm đất nước", "b. Chính sách coi trọng nhân tài", "c. Chính sách coi trọng nhân tài và đào tạo quan lại qua khoa cử của nhà Lê", "d. Kết hợp hình thức tuyển chọn quan lại qua khoa cử"], answer: "c" },
+            { q: "Câu 124. Câu đó sau nói về vị anh hùng dân tộc nào ở nước ta? “Nửa vua phá Tống bình Chiêm Cũng nên một đấng hùng anh đương thời Hiểm vì các con dở hơi Tranh dành ngôi vị mà rồi suy vong”", options: ["a. Lê Đại Hành", "b. Lý Thường Kiệt", "c. Trần Hưng Đạo", "d. Nguyễn Huệ"], answer: "a" },
+            { q: "Câu 125. Tác phẩm địa lí Đại Việt của Danh nhân văn hóa Nguyễn Trãi có tên gọi là gì?", options: ["a. Nhất thống dư địa chí", "b. Dư địa chí", "c. Hồng Đức bản đồ", "d. An Nam hình thăng đồ"], answer: "b" }
+        ];
+
+        let html = '';
+        questions.forEach((item, index) => {
+            html += `<div class="question">
+                <h3>${item.q}</h3>
+                <ul class="options" id="options-${index}">`;
+            item.options.forEach((opt, i) => {
+                const value = String.fromCharCode(97 + i);
+                html += `<li id="li-${index}-${value}"><input type="radio" name="q${index}" value="${value}" id="q${index}_${value}"> ${opt}</li>`;
+            });
+            html += `</ul>
+            </div>`;
+        });
+        document.getElementById('questions').innerHTML = html;
+
+        // Thêm event listener cho mỗi radio button
+        questions.forEach((item, index) => {
+            const radios = document.querySelectorAll(`input[name="q${index}"]`);
+            radios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const selectedValue = this.value;
+                    const optionList = document.getElementById(`options-${index}`);
+                    optionList.querySelectorAll('li').forEach(li => li.classList.remove('correct', 'incorrect'));
+
+                    if (selectedValue === item.answer) {
+                        document.getElementById(`li-${index}-${selectedValue}`).classList.add('correct');
+                    } else {
+                        document.getElementById(`li-${index}-${selectedValue}`).classList.add('incorrect');
+                        // Highlight đáp án đúng
+                        const correctValue = item.answer;
+                        document.getElementById(`li-${index}-${correctValue}`).classList.add('correct');
+                    }
+                });
+            });
+        });
+
+        function submitQuiz() {
+            let score = 0;
+            questions.forEach((item, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selected && selected.value === item.answer) {
+                    score++;
+                }
+            });
+            const percentage = (score / questions.length * 100).toFixed(2);
+            document.getElementById('result').innerHTML = `<h2>Kết quả: ${score}/${questions.length} (${percentage}%)</h2>`;
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
